@@ -1,0 +1,46 @@
+{
+  "phases": [
+    {
+      "phase": 1,
+      "title": "Digital logic",
+      "module_start": 1,
+      "module_end": 4,
+      "learning_goal": "Build visible, manipulable intuition for digital logic."
+    },
+    {
+      "phase": 2,
+      "title": "Numeric hardware",
+      "module_start": 5,
+      "module_end": 8,
+      "learning_goal": "Build visible, manipulable intuition for numeric hardware."
+    },
+    {
+      "phase": 3,
+      "title": "Streaming architectures",
+      "module_start": 9,
+      "module_end": 12,
+      "learning_goal": "Build visible, manipulable intuition for streaming architectures."
+    },
+    {
+      "phase": 4,
+      "title": "Clocking and timing",
+      "module_start": 13,
+      "module_end": 16,
+      "learning_goal": "Build visible, manipulable intuition for clocking and timing."
+    },
+    {
+      "phase": 5,
+      "title": "Host and converter interfaces",
+      "module_start": 17,
+      "module_end": 20,
+      "learning_goal": "Build visible, manipulable intuition for host and converter interfaces."
+    },
+    {
+      "phase": 6,
+      "title": "Coherent signal systems",
+      "module_start": 21,
+      "module_end": 24,
+      "learning_goal": "Build visible, manipulable intuition for coherent signal systems."
+    }
+  ]
+}

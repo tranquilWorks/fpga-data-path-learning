@@ -1,0 +1,408 @@
+{
+  "schema_version": 1,
+  "product": "fpga-data-path-learning",
+  "title": "FPGA, Converter Interfaces, and High-Speed Data Paths",
+  "purpose": "Learn how samples move through logic, clocks, buffers, buses, DMA, and converters while preserving timing and coherence.",
+  "module_count": 24,
+  "progression_rule": "Complete modules in order until the first six are complete; later modules may be selected when their prerequisites are met.",
+  "interaction_contract": {
+    "environment": "MATLAB",
+    "notebook_format": "MATLAB scripts with %% Live Editor cells",
+    "lever_ui": "uifigure controls",
+    "required_sweeps": 2,
+    "required_broken_cases": 1,
+    "randomness": "seeded",
+    "base_matlab_preferred": true,
+    "learning_cycle": [
+      "read",
+      "visualize-baseline",
+      "move-one-lever",
+      "visualize-delta",
+      "read-and-explain"
+    ]
+  },
+  "modules": [
+    {
+      "number": 1,
+      "id": "P01",
+      "title": "Watch a Pipeline and FIFO Absorb Bursts",
+      "guiding_question": "How do bursts, service rate, and FIFO depth determine loss and latency?",
+      "phase": 1,
+      "phase_title": "Digital logic",
+      "slug": "watch-a-pipeline-and-fifo-absorb-bursts",
+      "folder": "modules/01-watch-a-pipeline-and-fifo-absorb-bursts",
+      "status": "implemented",
+      "implementation_batch": "P01",
+      "prerequisites": [],
+      "evidence_level": "simulated"
+    },
+    {
+      "number": 2,
+      "id": "P02",
+      "title": "Build Combinational Logic from Truth Tables",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you build Combinational Logic from Truth Tables?",
+      "phase": 1,
+      "phase_title": "Digital logic",
+      "slug": "build-combinational-logic-from-truth-tables",
+      "folder": "modules/02-build-combinational-logic-from-truth-tables",
+      "status": "scaffolded",
+      "implementation_batch": "P02",
+      "prerequisites": [
+        "P01"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 3,
+      "id": "P03",
+      "title": "Store State with Registers",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you store State with Registers?",
+      "phase": 1,
+      "phase_title": "Digital logic",
+      "slug": "store-state-with-registers",
+      "folder": "modules/03-store-state-with-registers",
+      "status": "scaffolded",
+      "implementation_batch": "P03",
+      "prerequisites": [
+        "P02"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 4,
+      "id": "P04",
+      "title": "Control Behavior with a Finite-State Machine",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you control Behavior with a Finite-State Machine?",
+      "phase": 1,
+      "phase_title": "Digital logic",
+      "slug": "control-behavior-with-a-finite-state-machine",
+      "folder": "modules/04-control-behavior-with-a-finite-state-machine",
+      "status": "scaffolded",
+      "implementation_batch": "P04",
+      "prerequisites": [
+        "P03"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 5,
+      "id": "P05",
+      "title": "Quantize Arithmetic into Fixed Point",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you quantize Arithmetic into Fixed Point?",
+      "phase": 2,
+      "phase_title": "Numeric hardware",
+      "slug": "quantize-arithmetic-into-fixed-point",
+      "folder": "modules/05-quantize-arithmetic-into-fixed-point",
+      "status": "scaffolded",
+      "implementation_batch": "P05",
+      "prerequisites": [
+        "P04"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 6,
+      "id": "P06",
+      "title": "Pipeline a Multiply-Accumulate",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you pipeline a Multiply-Accumulate?",
+      "phase": 2,
+      "phase_title": "Numeric hardware",
+      "slug": "pipeline-a-multiply-accumulate",
+      "folder": "modules/06-pipeline-a-multiply-accumulate",
+      "status": "scaffolded",
+      "implementation_batch": "P06",
+      "prerequisites": [
+        "P05"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 7,
+      "id": "P07",
+      "title": "Trade Resources for Throughput",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you trade Resources for Throughput?",
+      "phase": 2,
+      "phase_title": "Numeric hardware",
+      "slug": "trade-resources-for-throughput",
+      "folder": "modules/07-trade-resources-for-throughput",
+      "status": "scaffolded",
+      "implementation_batch": "P07",
+      "prerequisites": [
+        "P06"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 8,
+      "id": "P08",
+      "title": "Generate a Numerically Controlled Oscillator",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you generate a Numerically Controlled Oscillator?",
+      "phase": 2,
+      "phase_title": "Numeric hardware",
+      "slug": "generate-a-numerically-controlled-oscillator",
+      "folder": "modules/08-generate-a-numerically-controlled-oscillator",
+      "status": "scaffolded",
+      "implementation_batch": "P08",
+      "prerequisites": [
+        "P07"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 9,
+      "id": "P09",
+      "title": "Handshake with Valid and Ready",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you handshake with Valid and Ready?",
+      "phase": 3,
+      "phase_title": "Streaming architectures",
+      "slug": "handshake-with-valid-and-ready",
+      "folder": "modules/09-handshake-with-valid-and-ready",
+      "status": "scaffolded",
+      "implementation_batch": "P09",
+      "prerequisites": [
+        "P08"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 10,
+      "id": "P10",
+      "title": "Apply Backpressure Without Losing Data",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you apply Backpressure Without Losing Data?",
+      "phase": 3,
+      "phase_title": "Streaming architectures",
+      "slug": "apply-backpressure-without-losing-data",
+      "folder": "modules/10-apply-backpressure-without-losing-data",
+      "status": "scaffolded",
+      "implementation_batch": "P10",
+      "prerequisites": [
+        "P09"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 11,
+      "id": "P11",
+      "title": "Frame Packets Across a Stream",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you frame Packets Across a Stream?",
+      "phase": 3,
+      "phase_title": "Streaming architectures",
+      "slug": "frame-packets-across-a-stream",
+      "folder": "modules/11-frame-packets-across-a-stream",
+      "status": "scaffolded",
+      "implementation_batch": "P11",
+      "prerequisites": [
+        "P10"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 12,
+      "id": "P12",
+      "title": "Size a FIFO from Burst and Service Rates",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you size a FIFO from Burst and Service Rates?",
+      "phase": 3,
+      "phase_title": "Streaming architectures",
+      "slug": "size-a-fifo-from-burst-and-service-rates",
+      "folder": "modules/12-size-a-fifo-from-burst-and-service-rates",
+      "status": "scaffolded",
+      "implementation_batch": "P12",
+      "prerequisites": [
+        "P11"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 13,
+      "id": "P13",
+      "title": "Cross a Clock Domain Safely",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you cross a Clock Domain Safely?",
+      "phase": 4,
+      "phase_title": "Clocking and timing",
+      "slug": "cross-a-clock-domain-safely",
+      "folder": "modules/13-cross-a-clock-domain-safely",
+      "status": "scaffolded",
+      "implementation_batch": "P13",
+      "prerequisites": [
+        "P12"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 14,
+      "id": "P14",
+      "title": "Make Metastability Risk Concrete",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you make Metastability Risk Concrete?",
+      "phase": 4,
+      "phase_title": "Clocking and timing",
+      "slug": "make-metastability-risk-concrete",
+      "folder": "modules/14-make-metastability-risk-concrete",
+      "status": "scaffolded",
+      "implementation_batch": "P14",
+      "prerequisites": [
+        "P13"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 15,
+      "id": "P15",
+      "title": "Read a Timing Constraint as a Physical Requirement",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you read a Timing Constraint as a Physical Requirement?",
+      "phase": 4,
+      "phase_title": "Clocking and timing",
+      "slug": "read-a-timing-constraint-as-a-physical-requirement",
+      "folder": "modules/15-read-a-timing-constraint-as-a-physical-requirement",
+      "status": "scaffolded",
+      "implementation_batch": "P15",
+      "prerequisites": [
+        "P14"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 16,
+      "id": "P16",
+      "title": "Measure End-to-End Pipeline Latency",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you measure End-to-End Pipeline Latency?",
+      "phase": 4,
+      "phase_title": "Clocking and timing",
+      "slug": "measure-end-to-end-pipeline-latency",
+      "folder": "modules/16-measure-end-to-end-pipeline-latency",
+      "status": "scaffolded",
+      "implementation_batch": "P16",
+      "prerequisites": [
+        "P15"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 17,
+      "id": "P17",
+      "title": "Control Registers with AXI-Lite",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you control Registers with AXI-Lite?",
+      "phase": 5,
+      "phase_title": "Host and converter interfaces",
+      "slug": "control-registers-with-axi-lite",
+      "folder": "modules/17-control-registers-with-axi-lite",
+      "status": "scaffolded",
+      "implementation_batch": "P17",
+      "prerequisites": [
+        "P16"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 18,
+      "id": "P18",
+      "title": "Move Samples with AXI-Stream",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you move Samples with AXI-Stream?",
+      "phase": 5,
+      "phase_title": "Host and converter interfaces",
+      "slug": "move-samples-with-axi-stream",
+      "folder": "modules/18-move-samples-with-axi-stream",
+      "status": "scaffolded",
+      "implementation_batch": "P18",
+      "prerequisites": [
+        "P17"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 19,
+      "id": "P19",
+      "title": "Trace a DMA Transfer over PCIe",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you trace a DMA Transfer over PCIe?",
+      "phase": 5,
+      "phase_title": "Host and converter interfaces",
+      "slug": "trace-a-dma-transfer-over-pcie",
+      "folder": "modules/19-trace-a-dma-transfer-over-pcie",
+      "status": "scaffolded",
+      "implementation_batch": "P19",
+      "prerequisites": [
+        "P18"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 20,
+      "id": "P20",
+      "title": "Frame Converter Data with JESD Concepts",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you frame Converter Data with JESD Concepts?",
+      "phase": 5,
+      "phase_title": "Host and converter interfaces",
+      "slug": "frame-converter-data-with-jesd-concepts",
+      "folder": "modules/20-frame-converter-data-with-jesd-concepts",
+      "status": "scaffolded",
+      "implementation_batch": "P20",
+      "prerequisites": [
+        "P19"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 21,
+      "id": "P21",
+      "title": "Build a Digital Downconverter",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you build a Digital Downconverter?",
+      "phase": 6,
+      "phase_title": "Coherent signal systems",
+      "slug": "build-a-digital-downconverter",
+      "folder": "modules/21-build-a-digital-downconverter",
+      "status": "scaffolded",
+      "implementation_batch": "P21",
+      "prerequisites": [
+        "P20"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 22,
+      "id": "P22",
+      "title": "Distribute a Trigger Across Channels",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you distribute a Trigger Across Channels?",
+      "phase": 6,
+      "phase_title": "Coherent signal systems",
+      "slug": "distribute-a-trigger-across-channels",
+      "folder": "modules/22-distribute-a-trigger-across-channels",
+      "status": "scaffolded",
+      "implementation_batch": "P22",
+      "prerequisites": [
+        "P21"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 23,
+      "id": "P23",
+      "title": "Preserve Multi-Channel Phase Coherence",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you preserve Multi-Channel Phase Coherence?",
+      "phase": 6,
+      "phase_title": "Coherent signal systems",
+      "slug": "preserve-multi-channel-phase-coherence",
+      "folder": "modules/23-preserve-multi-channel-phase-coherence",
+      "status": "scaffolded",
+      "implementation_batch": "P23",
+      "prerequisites": [
+        "P22"
+      ],
+      "evidence_level": "none"
+    },
+    {
+      "number": 24,
+      "id": "P24",
+      "title": "Debug a Host-FPGA-Converter Chain",
+      "guiding_question": "What inputs, observable effects, and failure modes matter when you debug a Host-FPGA-Converter Chain?",
+      "phase": 6,
+      "phase_title": "Coherent signal systems",
+      "slug": "debug-a-host-fpga-converter-chain",
+      "folder": "modules/24-debug-a-host-fpga-converter-chain",
+      "status": "scaffolded",
+      "implementation_batch": "P24",
+      "prerequisites": [
+        "P23"
+      ],
+      "evidence_level": "none"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+# Curriculum modules
+
+The canonical order is foundational and cumulative. Each `P##` is one governed,
+reviewable implementation batch. `implemented` means the complete learner slice exists;
+`scaffolded` means the batch is intentionally non-runnable.
+
+| Batch | Phase | Module | Guiding question | Status |
+| --- | --- | --- | --- | --- |
+| P01 | 1: Digital logic | [Watch a Pipeline and FIFO Absorb Bursts](../modules/01-watch-a-pipeline-and-fifo-absorb-bursts/README.md) | How do bursts, service rate, and FIFO depth determine loss and latency? | implemented |
+| P02 | 1: Digital logic | [Build Combinational Logic from Truth Tables](../modules/02-build-combinational-logic-from-truth-tables/README.md) | What inputs, observable effects, and failure modes matter when you build Combinational Logic from Truth Tables? | scaffolded |
+| P03 | 1: Digital logic | [Store State with Registers](../modules/03-store-state-with-registers/README.md) | What inputs, observable effects, and failure modes matter when you store State with Registers? | scaffolded |
+| P04 | 1: Digital logic | [Control Behavior with a Finite-State Machine](../modules/04-control-behavior-with-a-finite-state-machine/README.md) | What inputs, observable effects, and failure modes matter when you control Behavior with a Finite-State Machine? | scaffolded |
+| P05 | 2: Numeric hardware | [Quantize Arithmetic into Fixed Point](../modules/05-quantize-arithmetic-into-fixed-point/README.md) | What inputs, observable effects, and failure modes matter when you quantize Arithmetic into Fixed Point? | scaffolded |
+| P06 | 2: Numeric hardware | [Pipeline a Multiply-Accumulate](../modules/06-pipeline-a-multiply-accumulate/README.md) | What inputs, observable effects, and failure modes matter when you pipeline a Multiply-Accumulate? | scaffolded |
+| P07 | 2: Numeric hardware | [Trade Resources for Throughput](../modules/07-trade-resources-for-throughput/README.md) | What inputs, observable effects, and failure modes matter when you trade Resources for Throughput? | scaffolded |
+| P08 | 2: Numeric hardware | [Generate a Numerically Controlled Oscillator](../modules/08-generate-a-numerically-controlled-oscillator/README.md) | What inputs, observable effects, and failure modes matter when you generate a Numerically Controlled Oscillator? | scaffolded |
+| P09 | 3: Streaming architectures | [Handshake with Valid and Ready](../modules/09-handshake-with-valid-and-ready/README.md) | What inputs, observable effects, and failure modes matter when you handshake with Valid and Ready? | scaffolded |
+| P10 | 3: Streaming architectures | [Apply Backpressure Without Losing Data](../modules/10-apply-backpressure-without-losing-data/README.md) | What inputs, observable effects, and failure modes matter when you apply Backpressure Without Losing Data? | scaffolded |
+| P11 | 3: Streaming architectures | [Frame Packets Across a Stream](../modules/11-frame-packets-across-a-stream/README.md) | What inputs, observable effects, and failure modes matter when you frame Packets Across a Stream? | scaffolded |
+| P12 | 3: Streaming architectures | [Size a FIFO from Burst and Service Rates](../modules/12-size-a-fifo-from-burst-and-service-rates/README.md) | What inputs, observable effects, and failure modes matter when you size a FIFO from Burst and Service Rates? | scaffolded |
+| P13 | 4: Clocking and timing | [Cross a Clock Domain Safely](../modules/13-cross-a-clock-domain-safely/README.md) | What inputs, observable effects, and failure modes matter when you cross a Clock Domain Safely? | scaffolded |
+| P14 | 4: Clocking and timing | [Make Metastability Risk Concrete](../modules/14-make-metastability-risk-concrete/README.md) | What inputs, observable effects, and failure modes matter when you make Metastability Risk Concrete? | scaffolded |
+| P15 | 4: Clocking and timing | [Read a Timing Constraint as a Physical Requirement](../modules/15-read-a-timing-constraint-as-a-physical-requirement/README.md) | What inputs, observable effects, and failure modes matter when you read a Timing Constraint as a Physical Requirement? | scaffolded |
+| P16 | 4: Clocking and timing | [Measure End-to-End Pipeline Latency](../modules/16-measure-end-to-end-pipeline-latency/README.md) | What inputs, observable effects, and failure modes matter when you measure End-to-End Pipeline Latency? | scaffolded |
+| P17 | 5: Host and converter interfaces | [Control Registers with AXI-Lite](../modules/17-control-registers-with-axi-lite/README.md) | What inputs, observable effects, and failure modes matter when you control Registers with AXI-Lite? | scaffolded |
+| P18 | 5: Host and converter interfaces | [Move Samples with AXI-Stream](../modules/18-move-samples-with-axi-stream/README.md) | What inputs, observable effects, and failure modes matter when you move Samples with AXI-Stream? | scaffolded |
+| P19 | 5: Host and converter interfaces | [Trace a DMA Transfer over PCIe](../modules/19-trace-a-dma-transfer-over-pcie/README.md) | What inputs, observable effects, and failure modes matter when you trace a DMA Transfer over PCIe? | scaffolded |
+| P20 | 5: Host and converter interfaces | [Frame Converter Data with JESD Concepts](../modules/20-frame-converter-data-with-jesd-concepts/README.md) | What inputs, observable effects, and failure modes matter when you frame Converter Data with JESD Concepts? | scaffolded |
+| P21 | 6: Coherent signal systems | [Build a Digital Downconverter](../modules/21-build-a-digital-downconverter/README.md) | What inputs, observable effects, and failure modes matter when you build a Digital Downconverter? | scaffolded |
+| P22 | 6: Coherent signal systems | [Distribute a Trigger Across Channels](../modules/22-distribute-a-trigger-across-channels/README.md) | What inputs, observable effects, and failure modes matter when you distribute a Trigger Across Channels? | scaffolded |
+| P23 | 6: Coherent signal systems | [Preserve Multi-Channel Phase Coherence](../modules/23-preserve-multi-channel-phase-coherence/README.md) | What inputs, observable effects, and failure modes matter when you preserve Multi-Channel Phase Coherence? | scaffolded |
+| P24 | 6: Coherent signal systems | [Debug a Host-FPGA-Converter Chain](../modules/24-debug-a-host-fpga-converter-chain/README.md) | What inputs, observable effects, and failure modes matter when you debug a Host-FPGA-Converter Chain? | scaffolded |
