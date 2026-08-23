@@ -24,14 +24,26 @@ def save_state(state):
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     STATE_FILE.write_text(json.dumps(state, indent=2) + "\n", encoding="utf-8")
 
-def resolve_module(manifest, ref):
+def resolve_module(manifest, ref, state=None):
     modules = manifest["modules"]
     if ref is None:
-        state = load_state()
-        if state.get("current"):
-            ref = state["current"]
-        else:
-            ref = next((m["id"] for m in modules if m["status"] == "implemented"), modules[0]["id"])
+        if state is None:
+            state = load_state()
+        current = next(
+            (module for module in modules if module["id"] == state.get("current")),
+            None,
+        )
+        if current is not None and current["status"] == "implemented":
+            return current
+        if current is not None:
+            earlier = [
+                module
+                for module in modules
+                if module["number"] < current["number"] and module["status"] == "implemented"
+            ]
+            if earlier:
+                return earlier[-1]
+        return next((module for module in modules if module["status"] == "implemented"), modules[0])
     ref_text = str(ref).strip().upper()
     for module in modules:
         if ref_text in {module["id"], str(module["number"]), f"{module['number']:02d}", module["slug"].upper()}:
@@ -59,6 +71,8 @@ def print_start(module):
 def cmd_start(args):
     manifest = load_manifest()
     module = resolve_module(manifest, args.module)
+    if module["status"] != "implemented":
+        return print_start(module)
     state = load_state()
     state["current"] = module["id"]
     save_state(state)
@@ -67,7 +81,11 @@ def cmd_start(args):
 def cmd_continue(_args):
     manifest = load_manifest()
     state = load_state()
-    return print_start(resolve_module(manifest, state.get("current")))
+    module = resolve_module(manifest, None, state)
+    if state.get("current") is not None and state.get("current") != module["id"]:
+        state["current"] = module["id"]
+        save_state(state)
+    return print_start(module)
 
 def cmd_list(_args):
     manifest = load_manifest()

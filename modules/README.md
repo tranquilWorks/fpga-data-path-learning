@@ -7,7 +7,7 @@ reviewable implementation batch. `implemented` means the complete learner slice 
 | Batch | Phase | Module | Guiding question | Status |
 | --- | --- | --- | --- | --- |
 | P01 | 1: Digital logic | [Watch a Pipeline and FIFO Absorb Bursts](../modules/01-watch-a-pipeline-and-fifo-absorb-bursts/README.md) | How do bursts, service rate, and FIFO depth determine loss and latency? | implemented |
-| P02 | 1: Digital logic | [Build Combinational Logic from Truth Tables](../modules/02-build-combinational-logic-from-truth-tables/README.md) | What inputs, observable effects, and failure modes matter when you build Combinational Logic from Truth Tables? | scaffolded |
+| P02 | 1: Digital logic | [Build Combinational Logic from Truth Tables](../modules/02-build-combinational-logic-from-truth-tables/README.md) | What inputs, observable effects, and failure modes matter when you build Combinational Logic from Truth Tables? | implemented |
 | P03 | 1: Digital logic | [Store State with Registers](../modules/03-store-state-with-registers/README.md) | What inputs, observable effects, and failure modes matter when you store State with Registers? | scaffolded |
 | P04 | 1: Digital logic | [Control Behavior with a Finite-State Machine](../modules/04-control-behavior-with-a-finite-state-machine/README.md) | What inputs, observable effects, and failure modes matter when you control Behavior with a Finite-State Machine? | scaffolded |
 | P05 | 2: Numeric hardware | [Quantize Arithmetic into Fixed Point](../modules/05-quantize-arithmetic-into-fixed-point/README.md) | What inputs, observable effects, and failure modes matter when you quantize Arithmetic into Fixed Point? | scaffolded |
