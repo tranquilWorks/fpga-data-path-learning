@@ -57,8 +57,8 @@ class LearnCliTests(unittest.TestCase):
             self.assertIn(module["id"], line)
             self.assertIn(f"[{module['status']}]", line)
 
-    def test_p01_through_p07_start_as_permanent_implemented_slices(self):
-        for module_id in ("P01", "P02", "P03", "P04", "P05", "P06", "P07"):
+    def test_p01_through_p08_start_as_permanent_implemented_slices(self):
+        for module_id in ("P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08"):
             with self.subTest(module=module_id):
                 started = self.run_cli("start", module_id)
                 self.assertEqual(started.returncode, 0, started.stderr)
@@ -137,8 +137,99 @@ class LearnCliTests(unittest.TestCase):
                 selected,
             )
 
-    def test_p02_through_p07_checks_route_to_executable_matlab_checks(self):
-        for module_id in ("P02", "P03", "P04", "P05", "P06", "P07"):
+    def test_p08_start_persists_and_continue_resumes_without_losing_progress(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = self.make_fixture(temporary)
+            state_dir = fixture / ".learning"
+            state_dir.mkdir()
+            original = {
+                "current": "P07",
+                "completed": {"P01": True, "P07": True},
+                "notes": {"P07": "retained resource-throughput teach-back"},
+            }
+            (state_dir / "progress.json").write_text(
+                json.dumps(original) + "\n",
+                encoding="utf-8",
+            )
+
+            started = self.invoke(fixture, "start", "P08")
+            self.assertEqual(started.returncode, 0, started.stderr)
+            self.assertIn(
+                "P08 — Generate a Numerically Controlled Oscillator",
+                started.stdout,
+            )
+            selected = json.loads(
+                (state_dir / "progress.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(selected["current"], "P08")
+            self.assertEqual(selected["completed"], original["completed"])
+            self.assertEqual(selected["notes"], original["notes"])
+
+            resumed = self.invoke(fixture, "continue")
+            self.assertEqual(resumed.returncode, 0, resumed.stderr)
+            self.assertIn(
+                "P08 — Generate a Numerically Controlled Oscillator",
+                resumed.stdout,
+            )
+            self.assertEqual(
+                json.loads(
+                    (state_dir / "progress.json").read_text(encoding="utf-8")
+                ),
+                selected,
+            )
+
+    def test_p08_complete_records_teach_back_and_preserves_progress(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = self.make_fixture(temporary)
+            state_dir = fixture / ".learning"
+            state_dir.mkdir()
+            original = {
+                "current": "P07",
+                "completed": {"P01": True, "P07": True},
+                "notes": {"P07": "retained resource-throughput teach-back"},
+            }
+            (state_dir / "progress.json").write_text(
+                json.dumps(original) + "\n",
+                encoding="utf-8",
+            )
+
+            teach_back = (
+                "K controls phase advance and frequency; truncating K before "
+                "accumulation shifts the tone and period."
+            )
+            completed = self.invoke(
+                fixture,
+                "complete",
+                "P08",
+                "--note",
+                teach_back,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            self.assertIn("Marked P08 complete.", completed.stdout)
+
+            saved = json.loads(
+                (state_dir / "progress.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(saved["current"], "P08")
+            self.assertEqual(
+                saved["completed"],
+                {"P01": True, "P07": True, "P08": True},
+            )
+            self.assertEqual(
+                saved["notes"],
+                {
+                    "P07": original["notes"]["P07"],
+                    "P08": teach_back,
+                },
+            )
+
+            status = self.invoke(fixture, "status")
+            self.assertEqual(status.returncode, 0, status.stderr)
+            self.assertIn("8 implemented, 3 completed", status.stdout)
+            self.assertIn("Current: P08", status.stdout)
+
+    def test_p02_through_p08_checks_route_to_executable_matlab_checks(self):
+        for module_id in ("P02", "P03", "P04", "P05", "P06", "P07", "P08"):
             with self.subTest(module=module_id):
                 checked = self.run_cli("check", module_id)
                 self.assertEqual(checked.returncode, 0, checked.stderr)
