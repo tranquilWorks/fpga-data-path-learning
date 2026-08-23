@@ -173,12 +173,12 @@
       "phase_title": "Streaming architectures",
       "slug": "apply-backpressure-without-losing-data",
       "folder": "modules/10-apply-backpressure-without-losing-data",
-      "status": "scaffolded",
+      "status": "implemented",
       "implementation_batch": "P10",
       "prerequisites": [
         "P09"
       ],
-      "evidence_level": "none"
+      "evidence_level": "simulated"
     },
     {
       "number": 11,
