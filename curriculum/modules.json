@@ -141,12 +141,12 @@
       "phase_title": "Numeric hardware",
       "slug": "generate-a-numerically-controlled-oscillator",
       "folder": "modules/08-generate-a-numerically-controlled-oscillator",
-      "status": "scaffolded",
+      "status": "implemented",
       "implementation_batch": "P08",
       "prerequisites": [
         "P07"
       ],
-      "evidence_level": "none"
+      "evidence_level": "simulated"
     },
     {
       "number": 9,

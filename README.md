@@ -26,6 +26,7 @@ From a shell:
 ./bin/learn start P05
 ./bin/learn start P06
 ./bin/learn start P07
+./bin/learn start P08
 ./bin/learn list
 ./bin/learn status
 ```
@@ -45,10 +46,11 @@ launch_lesson("P04")
 launch_lesson("P05")
 launch_lesson("P06")
 launch_lesson("P07")
-run_module_checks("P07")
+launch_lesson("P08")
+run_module_checks("P08")
 ```
 
-`P01` is the reference implementation, and `P02` through `P07` are also implemented. Implemented modules always form the contiguous prefix recorded in `curriculum/modules.json`; later modules remain intentionally scaffolded until their bounded batches pass verification.
+`P01` is the reference implementation, and `P02` through `P08` are also implemented. Implemented modules always form the contiguous prefix recorded in `curriculum/modules.json`; later modules remain intentionally scaffolded until their bounded batches pass verification.
 
 ## Module layout
 
