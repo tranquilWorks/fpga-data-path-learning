@@ -61,12 +61,12 @@
       "phase_title": "Digital logic",
       "slug": "store-state-with-registers",
       "folder": "modules/03-store-state-with-registers",
-      "status": "scaffolded",
+      "status": "implemented",
       "implementation_batch": "P03",
       "prerequisites": [
         "P02"
       ],
-      "evidence_level": "none"
+      "evidence_level": "simulated"
     },
     {
       "number": 4,
