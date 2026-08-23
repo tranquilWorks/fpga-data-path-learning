@@ -524,6 +524,150 @@ class LearnCliTests(unittest.TestCase):
             self.assertEqual(recovered["completed"], original["completed"])
             self.assertEqual(recovered["notes"], original["notes"])
 
+    def test_p11_start_persists_and_continue_resumes_without_losing_progress(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = self.make_fixture(temporary)
+            state_dir = fixture / ".learning"
+            state_dir.mkdir()
+            original = {
+                "current": "P10",
+                "completed": {"P01": True, "P10": True},
+                "notes": {"P10": "retained FIFO backpressure teach-back"},
+            }
+            (state_dir / "progress.json").write_text(
+                json.dumps(original) + "\n",
+                encoding="utf-8",
+            )
+
+            started = self.invoke(fixture, "start", "P11")
+            self.assertEqual(started.returncode, 0, started.stderr)
+            self.assertIn("P11 — Frame Packets Across a Stream", started.stdout)
+            selected = json.loads(
+                (state_dir / "progress.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(selected["current"], "P11")
+            self.assertEqual(selected["completed"], original["completed"])
+            self.assertEqual(selected["notes"], original["notes"])
+
+            resumed = self.invoke(fixture, "continue")
+            self.assertEqual(resumed.returncode, 0, resumed.stderr)
+            self.assertIn("P11 — Frame Packets Across a Stream", resumed.stdout)
+            self.assertEqual(
+                json.loads(
+                    (state_dir / "progress.json").read_text(encoding="utf-8")
+                ),
+                selected,
+            )
+
+    def test_p11_complete_records_teach_back_and_preserves_progress(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = self.make_fixture(temporary)
+            state_dir = fixture / ".learning"
+            state_dir.mkdir()
+            original = {
+                "current": "P10",
+                "completed": {"P01": True, "P10": True},
+                "notes": {"P10": "retained FIFO backpressure teach-back"},
+            }
+            (state_dir / "progress.json").write_text(
+                json.dumps(original) + "\n",
+                encoding="utf-8",
+            )
+
+            teach_back = (
+                "Payload and LAST transfer together only with valid and ready; "
+                "advancing LAST during a stall can corrupt packet lengths even "
+                "when every payload arrives in order."
+            )
+            completed = self.invoke(
+                fixture,
+                "complete",
+                "P11",
+                "--note",
+                teach_back,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            self.assertIn("Marked P11 complete.", completed.stdout)
+
+            saved = json.loads(
+                (state_dir / "progress.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(saved["current"], "P11")
+            self.assertEqual(
+                saved["completed"],
+                {"P01": True, "P10": True, "P11": True},
+            )
+            self.assertEqual(
+                saved["notes"],
+                {
+                    "P10": original["notes"]["P10"],
+                    "P11": teach_back,
+                },
+            )
+
+            status = self.invoke(fixture, "status")
+            self.assertEqual(status.returncode, 0, status.stderr)
+            implemented = sum(
+                module["status"] == "implemented"
+                for module in MANIFEST["modules"]
+            )
+            self.assertIn(f"{implemented} implemented, 3 completed", status.stdout)
+            self.assertIn("Current: P11", status.stdout)
+
+    def test_p11_temporary_rollback_recovers_to_p10_and_preserves_progress(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = self.make_fixture(temporary)
+            fixture_manifest_path = fixture / "curriculum/modules.json"
+            fixture_manifest = json.loads(
+                fixture_manifest_path.read_text(encoding="utf-8")
+            )
+            p11 = next(
+                module
+                for module in fixture_manifest["modules"]
+                if module["id"] == "P11"
+            )
+            p11["status"] = "scaffolded"
+            p11["evidence_level"] = "none"
+            fixture_manifest_path.write_text(
+                json.dumps(fixture_manifest, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            state_dir = fixture / ".learning"
+            state_dir.mkdir()
+            original = {
+                "current": "P11",
+                "completed": {"P01": True, "P10": True, "P11": True},
+                "notes": {
+                    "P10": "retained FIFO backpressure teach-back",
+                    "P11": "retained packet-framing teach-back",
+                },
+            }
+            state_path = state_dir / "progress.json"
+            state_path.write_text(json.dumps(original) + "\n", encoding="utf-8")
+
+            refused = self.invoke(fixture, "start", "P11")
+            self.assertEqual(refused.returncode, 2)
+            self.assertIn(
+                "Activate its governed implementation batch",
+                refused.stdout,
+            )
+            self.assertEqual(
+                json.loads(state_path.read_text(encoding="utf-8")),
+                original,
+            )
+
+            resumed = self.invoke(fixture, "continue")
+            self.assertEqual(resumed.returncode, 0, resumed.stderr)
+            self.assertIn(
+                "P10 — Apply Backpressure Without Losing Data",
+                resumed.stdout,
+            )
+            recovered = json.loads(state_path.read_text(encoding="utf-8"))
+            self.assertEqual(recovered["current"], "P10")
+            self.assertEqual(recovered["completed"], original["completed"])
+            self.assertEqual(recovered["notes"], original["notes"])
+
     def test_manifest_implemented_checks_route_to_executable_matlab_checks(self):
         implemented_with_checks = [
             module["id"]
