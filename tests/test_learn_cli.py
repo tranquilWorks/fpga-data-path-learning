@@ -57,8 +57,8 @@ class LearnCliTests(unittest.TestCase):
             self.assertIn(module["id"], line)
             self.assertIn(f"[{module['status']}]", line)
 
-    def test_p01_and_p02_start_as_permanent_implemented_slices(self):
-        for module_id in ("P01", "P02"):
+    def test_p01_through_p03_start_as_permanent_implemented_slices(self):
+        for module_id in ("P01", "P02", "P03"):
             with self.subTest(module=module_id):
                 started = self.run_cli("start", module_id)
                 self.assertEqual(started.returncode, 0, started.stderr)
@@ -67,10 +67,12 @@ class LearnCliTests(unittest.TestCase):
                 self.assertIn("Guiding question:", started.stdout)
                 self.assertNotIn("Activate its governed implementation batch", started.stdout)
 
-    def test_p02_check_routes_to_executable_matlab_check(self):
-        checked = self.run_cli("check", "P02")
-        self.assertEqual(checked.returncode, 0, checked.stderr)
-        self.assertIn("run_module_checks('P02')", checked.stdout)
+    def test_p02_and_p03_checks_route_to_executable_matlab_checks(self):
+        for module_id in ("P02", "P03"):
+            with self.subTest(module=module_id):
+                checked = self.run_cli("check", module_id)
+                self.assertEqual(checked.returncode, 0, checked.stderr)
+                self.assertIn(f"run_module_checks('{module_id}')", checked.stdout)
 
     def test_manifest_derived_scaffold_refuses_without_corrupting_resume(self):
         scaffold = next(

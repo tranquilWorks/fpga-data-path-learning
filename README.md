@@ -21,6 +21,7 @@ From a shell:
 ./bin/learn start
 ./bin/learn start P01
 ./bin/learn start P02
+./bin/learn start P03
 ./bin/learn list
 ./bin/learn status
 ```
@@ -35,10 +36,11 @@ In MATLAB:
 
 ```matlab
 launch_lesson("P02")
-run_module_checks("P02")
+launch_lesson("P03")
+run_module_checks("P03")
 ```
 
-`P01` is the reference implementation, and `P02` is also implemented. Implemented modules always form the contiguous prefix recorded in `curriculum/modules.json`; later modules remain intentionally scaffolded until their bounded batches pass verification.
+`P01` is the reference implementation, and `P02` and `P03` are also implemented. Implemented modules always form the contiguous prefix recorded in `curriculum/modules.json`; later modules remain intentionally scaffolded until their bounded batches pass verification.
 
 ## Module layout
 
