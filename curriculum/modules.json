@@ -205,12 +205,12 @@
       "phase_title": "Streaming architectures",
       "slug": "size-a-fifo-from-burst-and-service-rates",
       "folder": "modules/12-size-a-fifo-from-burst-and-service-rates",
-      "status": "scaffolded",
+      "status": "implemented",
       "implementation_batch": "P12",
       "prerequisites": [
         "P11"
       ],
-      "evidence_level": "none"
+      "evidence_level": "simulated"
     },
     {
       "number": 13,

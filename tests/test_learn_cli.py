@@ -668,6 +668,153 @@ class LearnCliTests(unittest.TestCase):
             self.assertEqual(recovered["completed"], original["completed"])
             self.assertEqual(recovered["notes"], original["notes"])
 
+    def test_p12_start_persists_and_continue_resumes_without_losing_progress(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = self.make_fixture(temporary)
+            state_dir = fixture / ".learning"
+            state_dir.mkdir()
+            original = {
+                "current": "P11",
+                "completed": {"P01": True, "P11": True},
+                "notes": {"P11": "retained packet-framing teach-back"},
+            }
+            (state_dir / "progress.json").write_text(
+                json.dumps(original) + "\n",
+                encoding="utf-8",
+            )
+
+            started = self.invoke(fixture, "start", "P12")
+            self.assertEqual(started.returncode, 0, started.stderr)
+            self.assertIn(
+                "P12 — Size a FIFO from Burst and Service Rates",
+                started.stdout,
+            )
+            selected = json.loads(
+                (state_dir / "progress.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(selected["current"], "P12")
+            self.assertEqual(selected["completed"], original["completed"])
+            self.assertEqual(selected["notes"], original["notes"])
+
+            resumed = self.invoke(fixture, "continue")
+            self.assertEqual(resumed.returncode, 0, resumed.stderr)
+            self.assertIn(
+                "P12 — Size a FIFO from Burst and Service Rates",
+                resumed.stdout,
+            )
+            self.assertEqual(
+                json.loads(
+                    (state_dir / "progress.json").read_text(encoding="utf-8")
+                ),
+                selected,
+            )
+
+    def test_p12_complete_records_teach_back_and_preserves_progress(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = self.make_fixture(temporary)
+            state_dir = fixture / ".learning"
+            state_dir.mkdir()
+            original = {
+                "current": "P11",
+                "completed": {"P01": True, "P11": True},
+                "notes": {"P11": "retained packet-framing teach-back"},
+            }
+            (state_dir / "progress.json").write_text(
+                json.dumps(original) + "\n",
+                encoding="utf-8",
+            )
+
+            teach_back = (
+                "Size a registered FIFO from maximum unbounded burst backlog; "
+                "a fall-through estimate can require backpressure and loses "
+                "data only when the source ignores ready."
+            )
+            completed = self.invoke(
+                fixture,
+                "complete",
+                "P12",
+                "--note",
+                teach_back,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            self.assertIn("Marked P12 complete.", completed.stdout)
+
+            saved = json.loads(
+                (state_dir / "progress.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(saved["current"], "P12")
+            self.assertEqual(
+                saved["completed"],
+                {"P01": True, "P11": True, "P12": True},
+            )
+            self.assertEqual(
+                saved["notes"],
+                {
+                    "P11": original["notes"]["P11"],
+                    "P12": teach_back,
+                },
+            )
+
+            status = self.invoke(fixture, "status")
+            self.assertEqual(status.returncode, 0, status.stderr)
+            implemented = sum(
+                module["status"] == "implemented"
+                for module in MANIFEST["modules"]
+            )
+            self.assertIn(f"{implemented} implemented, 3 completed", status.stdout)
+            self.assertIn("Current: P12", status.stdout)
+
+    def test_p12_temporary_rollback_recovers_to_p11_and_preserves_progress(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = self.make_fixture(temporary)
+            fixture_manifest_path = fixture / "curriculum/modules.json"
+            fixture_manifest = json.loads(
+                fixture_manifest_path.read_text(encoding="utf-8")
+            )
+            for module in fixture_manifest["modules"]:
+                if module["number"] >= 12 and module["status"] == "implemented":
+                    module["status"] = "scaffolded"
+                    module["evidence_level"] = "none"
+            fixture_manifest_path.write_text(
+                json.dumps(fixture_manifest, indent=2) + "\n",
+                encoding="utf-8",
+            )
+
+            state_dir = fixture / ".learning"
+            state_dir.mkdir()
+            original = {
+                "current": "P12",
+                "completed": {"P01": True, "P11": True, "P12": True},
+                "notes": {
+                    "P11": "retained packet-framing teach-back",
+                    "P12": "retained registered-FIFO sizing teach-back",
+                },
+            }
+            state_path = state_dir / "progress.json"
+            state_path.write_text(json.dumps(original) + "\n", encoding="utf-8")
+
+            refused = self.invoke(fixture, "start", "P12")
+            self.assertEqual(refused.returncode, 2)
+            self.assertIn(
+                "Activate its governed implementation batch",
+                refused.stdout,
+            )
+            self.assertEqual(
+                json.loads(state_path.read_text(encoding="utf-8")),
+                original,
+            )
+
+            resumed = self.invoke(fixture, "continue")
+            self.assertEqual(resumed.returncode, 0, resumed.stderr)
+            self.assertIn(
+                "P11 — Frame Packets Across a Stream",
+                resumed.stdout,
+            )
+            recovered = json.loads(state_path.read_text(encoding="utf-8"))
+            self.assertEqual(recovered["current"], "P11")
+            self.assertEqual(recovered["completed"], original["completed"])
+            self.assertEqual(recovered["notes"], original["notes"])
+
     def test_manifest_implemented_checks_route_to_executable_matlab_checks(self):
         implemented_with_checks = [
             module["id"]
