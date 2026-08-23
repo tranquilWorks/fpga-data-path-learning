@@ -36,7 +36,7 @@ This repository is the **FPGA, Converter Interfaces, and High-Speed Data Paths**
 ## Governed agentic delivery
 
 - Product: `fpga-data-path-learning`; delivery profile: `product-data`.
-- Control revision: `2206fb22691b3af0d9d6a39e582e0e9516a24c50`; harness version: `2`.
+- Control revision: `4434b282cfb47997d791bd2933faf980453d199a`; harness version: `2`.
 - Read `contracts/profile-requirements.yaml` and the approved
   `contracts/active-batch.yaml` before implementation.
 - Stay inside active-batch allowed paths and preserve every forbidden path.
