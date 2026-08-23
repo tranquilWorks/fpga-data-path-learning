@@ -57,8 +57,8 @@ class LearnCliTests(unittest.TestCase):
             self.assertIn(module["id"], line)
             self.assertIn(f"[{module['status']}]", line)
 
-    def test_p01_through_p05_start_as_permanent_implemented_slices(self):
-        for module_id in ("P01", "P02", "P03", "P04", "P05"):
+    def test_p01_through_p06_start_as_permanent_implemented_slices(self):
+        for module_id in ("P01", "P02", "P03", "P04", "P05", "P06"):
             with self.subTest(module=module_id):
                 started = self.run_cli("start", module_id)
                 self.assertEqual(started.returncode, 0, started.stderr)
@@ -67,8 +67,43 @@ class LearnCliTests(unittest.TestCase):
                 self.assertIn("Guiding question:", started.stdout)
                 self.assertNotIn("Activate its governed implementation batch", started.stdout)
 
-    def test_p02_through_p05_checks_route_to_executable_matlab_checks(self):
-        for module_id in ("P02", "P03", "P04", "P05"):
+    def test_p06_start_persists_and_continue_resumes_without_losing_progress(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = self.make_fixture(temporary)
+            state_dir = fixture / ".learning"
+            state_dir.mkdir()
+            original = {
+                "current": "P05",
+                "completed": {"P01": True, "P05": True},
+                "notes": {"P05": "retained fixed-point teach-back"},
+            }
+            (state_dir / "progress.json").write_text(
+                json.dumps(original) + "\n",
+                encoding="utf-8",
+            )
+
+            started = self.invoke(fixture, "start", "P06")
+            self.assertEqual(started.returncode, 0, started.stderr)
+            self.assertIn("P06 — Pipeline a Multiply-Accumulate", started.stdout)
+            selected = json.loads(
+                (state_dir / "progress.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(selected["current"], "P06")
+            self.assertEqual(selected["completed"], original["completed"])
+            self.assertEqual(selected["notes"], original["notes"])
+
+            resumed = self.invoke(fixture, "continue")
+            self.assertEqual(resumed.returncode, 0, resumed.stderr)
+            self.assertIn("P06 — Pipeline a Multiply-Accumulate", resumed.stdout)
+            self.assertEqual(
+                json.loads(
+                    (state_dir / "progress.json").read_text(encoding="utf-8")
+                ),
+                selected,
+            )
+
+    def test_p02_through_p06_checks_route_to_executable_matlab_checks(self):
+        for module_id in ("P02", "P03", "P04", "P05", "P06"):
             with self.subTest(module=module_id):
                 checked = self.run_cli("check", module_id)
                 self.assertEqual(checked.returncode, 0, checked.stderr)
